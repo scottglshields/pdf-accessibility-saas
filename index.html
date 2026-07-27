@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AccessShift AI - Professional PDF Accessibility Remediation</title>
     <script src="https://tailwindcss.com"></script>
+    <style>
+        .state-hidden { display: none !important; }
+    </style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-blue-500 selection:text-white">
 
@@ -62,13 +65,13 @@
                 </button>
             </div>
 
-            <div id="loadingState" class="hidden border border-slate-700 bg-slate-900/50 rounded-2xl p-6 text-center mt-6">
+            <div id="loadingState" class="state-hidden border border-slate-700 bg-slate-900/50 rounded-2xl p-6 text-center mt-6">
                 <div class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-3" role="status"></div>
                 <p class="text-sm font-semibold text-slate-300">Communicating with Render processing pipeline backend engine...</p>
                 <p class="text-xs text-slate-500 mt-1">Parsing trees, organizing layouts, and validating alternate tags.</p>
             </div>
 
-            <div id="errorState" class="hidden border border-red-500/30 bg-red-500/5 rounded-2xl p-6 mt-6">
+            <div id="errorState" class="state-hidden border border-red-500/30 bg-red-500/5 rounded-2xl p-6 mt-6">
                 <div class="flex items-start space-x-3">
                     <div class="p-1 bg-red-500/10 rounded-lg text-red-400 mt-0.5">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,7 +89,7 @@
                 </div>
             </div>
 
-            <div id="resultsDashboard" class="hidden border-t border-slate-700/60 pt-8 mt-8">
+            <div id="resultsDashboard" class="state-hidden border-t border-slate-700/60 pt-8 mt-8">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                     <div class="bg-slate-900/60 border border-slate-700/50 rounded-2xl p-5 text-center">
                         <span class="block text-xs font-bold uppercase tracking-wider text-slate-400">Compliance Health</span>
@@ -131,14 +134,14 @@
             apiInput.value = localStorage.getItem('saved_pdf_endpoint');
         }
 
-        fileInput.addEventListener('change', (e) => { if (e.target.files.length) updateSelectedFile(e.target.files[0]); });
 
+fileInput.addEventListener('change', (e) => { if (e.target.files.length) updateSelectedFile(e.target.files); });
 dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-blue-500', 'bg-blue-500/5'); });
 dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-blue-500', 'bg-blue-500/5'); });
 dropZone.addEventListener('drop', (e) => {
 e.preventDefault();
 dropZone.classList.remove('border-blue-500', 'bg-blue-500/5');
-if (e.dataTransfer.files.length) updateSelectedFile(e.dataTransfer.files[0]);
+if (e.dataTransfer.files.length) updateSelectedFile(e.dataTransfer.files);
 });
 copyErrorBtn.addEventListener('click', () => {
 navigator.clipboard.writeText(document.getElementById('errorText').value);
@@ -148,7 +151,7 @@ function updateSelectedFile(file) {
 if (file && file.type === "application/pdf") {
 selectedFile = file;
 fileLabel.innerText = "Selected File: " + file.name + " (" + (file.size / (1024 * 1024)).toFixed(2) + " MB)";
-document.getElementById('errorState').classList.add('hidden');
+document.getElementById('errorState').classList.add('state-hidden');
 } else {
 alert("Please make sure to select a valid PDF file extension layout.");
 }
@@ -165,9 +168,9 @@ return;
 }
 if (baseEndpoint.endsWith('/')) baseEndpoint = baseEndpoint.slice(0, -1);
 localStorage.setItem('saved_pdf_endpoint', baseEndpoint);
-document.getElementById('loadingState').classList.remove('hidden');
-document.getElementById('resultsDashboard').classList.add('hidden');
-document.getElementById('errorState').classList.add('hidden');
+document.getElementById('loadingState').classList.remove('state-hidden');
+document.getElementById('resultsDashboard').classList.add('state-hidden');
+document.getElementById('errorState').classList.add('state-hidden');
 const formData = new FormData();
 formData.append("file", selectedFile);
 try {
@@ -177,7 +180,7 @@ body: formData
 });
 if (!response.ok) {
 throw new Error("HTTP Error Status: " + response.status + " - Server rejected request pipeline schema standard variables.");
-}
+} [2] 
 const data = await response.json();
 if (data.status === "success") {
 document.getElementById('scoreMetric').innerText = data.score + "%";
@@ -192,16 +195,16 @@ li.innerText = rec;
 recList.appendChild(li);
 });
 document.getElementById('downloadBtn').href = baseEndpoint + data.downloadUrl;
-document.getElementById('resultsDashboard').classList.remove('hidden');
+document.getElementById('resultsDashboard').classList.remove('state-hidden');
 } else {
 throw new Error("Application Processing Exception Error Trace: " + data.message);
 }
 } catch (err) {
 document.getElementById('errorText').value = (err.stack || err.message) + "\n\nTroubleshooting Note:\nIf you just spun up Render, wait 30 seconds for the engine service instance to finish warming up and click submit again.";
-document.getElementById('errorState').classList.remove('hidden');
+document.getElementById('errorState').classList.remove('state-hidden');
 } finally {
-document.getElementById('loadingState').classList.add('hidden');
+document.getElementById('loadingState').classList.add('state-hidden');
 }
-});
-    </script></body></html>
-        
+});</script></body></html>
+
+
