@@ -1,249 +1,301 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AccessShift AI — Easy PDF Accessibility Fixer</title>
+    <title>AccessShift AI — PDF Accessibility Fixer</title>
     
-    <!-- Structured Data (Schema.org / Geo / LLM SEO) -->
+    <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "AccessShift AI",
       "url": "https://accessshift.ai",
-      "description": "Automated PDF accessibility fixer for WCAG 2.1 compliance and AI alt-text generation.",
+      "description": "Automated PDF accessibility fixer for WCAG compliance.",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
     }
     </script>
 
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --brand-primary: #2563eb;
-            --brand-accent: #1d4ed8;
-            --bg-canvas: #f8fafc;
-            --text-main: #0f172a;
-            --status-success: #16a34a;
-            --status-error: #dc2626;
-        }
-
-        /* Modern CSS pseudo-class usage */
         body {
-            background-color: var(--bg-canvas);
-            color: var(--text-main);
+            background-color: #090d16;
+            color: #f8fafc;
+            user-select: none;
         }
 
-        :is(section, label, button) {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Highlight state using :has selector */
-        label:has(input[type="file"]:focus-visible) {
-            outline: 3px solid var(--brand-primary);
-            outline-offset: 2px;
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .state-hidden { display: none !important; }
+
+        /* Custom scrollbar styling for small sub-containers */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 9999px; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased">
+<body class="h-screen w-screen overflow-hidden flex flex-col justify-between p-3 md:p-5 font-sans antialiased">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <nav class="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
-            <article class="flex items-center space-x-3">
-                <mark class="h-10 w-10 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white shadow-sm">AS</mark>
-                <strong class="text-xl font-bold tracking-tight">AccessShift <small class="text-blue-600 font-semibold uppercase tracking-wider text-xs">AI Fixer</small></strong>
-            </article>
-        </nav>
+    <header class="w-full max-w-xl mx-auto flex items-center justify-between flex-none py-1">
+        <div class="flex items-center space-x-2.5">
+            <span class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center font-black text-white text-xs shadow-lg shadow-blue-500/20">AS</span>
+            <span class="font-bold tracking-tight text-sm md:text-base text-slate-100">AccessShift <span class="text-blue-400 font-semibold text-[10px] uppercase ml-1">AI</span></span>
+        </div>
+
+        <!-- Status Indicator Pill -->
+        <div class="flex items-center space-x-1.5 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[10px] font-bold text-emerald-300 uppercase tracking-wide">Ready</span>
+        </div>
     </header>
 
-    <main class="flex-1 max-w-3xl mx-auto px-4 w-full py-8 space-y-6">
-        <header class="text-center space-y-2">
-            <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
-                Make Your PDFs Clear & Accessible
-            </h1>
-            <p class="text-base text-slate-600 max-w-xl mx-auto font-medium">
-                Update document settings and generate missing image descriptions automatically.
-            </p>
-        </header>
-
-        <section class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+    <main class="flex-1 max-w-xl mx-auto w-full flex flex-col justify-center my-auto overflow-hidden">
+        <div class="glass-panel rounded-2xl p-4 md:p-5 shadow-2xl space-y-3">
             
-            <fieldset class="space-y-2 border-0 p-0 m-0">
-                <legend class="text-sm font-bold uppercase tracking-wide text-slate-700">1. Server Address</legend>
-                <input type="url" id="apiEndpoint" class="w-full px-4 py-3 border border-slate-300 bg-slate-50 rounded-xl font-mono text-sm text-blue-700 font-bold focus:outline-none focus:border-blue-600 focus:bg-white transition" placeholder="https://onrender.com" aria-describedby="serverHint">
-                <p id="serverHint" class="text-xs text-slate-500">Free servers sleep when idle. First attempts may take up to 30 seconds to start.</p>
-            </fieldset>
+            <!-- Compact Title Header -->
+            <div class="text-center space-y-0.5">
+                <h1 class="text-lg md:text-xl font-black tracking-tight text-white">PDF Accessibility Fixer</h1>
+                <p class="text-[11px] text-slate-400">Automated WCAG 2.1 remediation & AI alt-text</p>
+            </div>
 
-            <fieldset class="space-y-2 border-0 p-0 m-0">
-                <legend class="text-sm font-bold uppercase tracking-wide text-slate-700">2. Select Document</legend>
-                
-                <label id="dropZone" for="fileInput" class="border-2 border-dashed border-slate-300 hover:border-blue-600 bg-slate-50 hover:bg-blue-50/50 rounded-xl p-8 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-3">
-                    <svg class="h-10 w-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V4a2 2 0 012-2h6l2 2h6a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+            <!-- Toast Notice Banner (Replaces native alerts) -->
+            <div id="toastNotice" class="state-hidden bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-1.5 text-xs text-amber-300 text-center font-medium"></div>
+
+            <!-- Server Connection Input -->
+            <div class="space-y-1">
+                <label for="apiEndpoint" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Server Connection URL</label>
+                <input type="url" id="apiEndpoint" 
+                    class="w-full px-3 py-1.5 bg-slate-900/80 border border-slate-700/80 rounded-lg text-xs font-mono text-blue-300 focus:outline-none focus:border-blue-500 transition" 
+                    placeholder="https://onrender.com">
+            </div>
+
+            <!-- File Upload Drag Zone -->
+            <fieldset class="border-0 p-0 m-0">
+                <div id="dropZone" class="group border-2 border-dashed border-slate-700 hover:border-blue-500 bg-slate-900/40 hover:bg-slate-800/80 rounded-xl p-4 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-1.5">
+                    <svg class="h-6 w-6 text-slate-400 group-hover:text-blue-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
-                    <output id="fileLabel" class="text-base font-bold text-slate-900">Drag & drop your PDF here, or click to browse</output>
+                    <output id="fileLabel" class="text-xs font-semibold text-slate-200 block truncate max-w-xs">Drop PDF here or click to browse</output>
                     <input type="file" id="fileInput" accept=".pdf,application/pdf" class="sr-only">
-                </label>
+                    <button type="button" id="browseBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-bold rounded-md border border-slate-700 transition cursor-pointer">
+                        Browse Files
+                    </button>
+                </div>
             </fieldset>
 
-            <button type="button" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold py-4 px-6 rounded-xl shadow-md transition text-lg tracking-wide flex items-center justify-center cursor-pointer">
-                <span>3. Start Fixing Document</span>
+            <!-- Action Button -->
+            <button type="button" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white font-bold py-2.5 px-4 rounded-xl shadow-lg shadow-blue-600/20 transition text-xs tracking-wide flex items-center justify-center cursor-pointer border-b-2 border-blue-800">
+                <span>Start Remediation</span>
             </button>
 
-            <article id="loadingState" class="state-hidden border border-blue-200 bg-blue-50 rounded-xl p-6 text-center space-y-2">
-                <progress class="animate-spin inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full" aria-label="Processing"></progress>
-                <h2 class="text-lg font-bold text-blue-900">Analyzing & Fixing Document...</h2>
-                <p class="text-xs text-blue-700 font-medium">Extracting structure, adjusting contrast, and applying alt-text labels.</p>
+            <!-- Loading Indicator Overlay -->
+            <article id="loadingState" class="state-hidden bg-blue-950/40 border border-blue-500/30 rounded-xl p-3 text-center space-y-1">
+                <div class="animate-spin inline-block w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full"></div>
+                <h2 class="text-xs font-bold text-blue-200">Processing PDF Document...</h2>
+                <p class="text-[10px] text-blue-400">Extracting tags, contrast & generating alt-text labels</p>
             </article>
 
-            <article id="errorState" class="state-hidden border border-red-200 bg-red-50 rounded-xl p-5 space-y-3">
-                <header class="flex items-center space-x-2 text-red-700">
-                    <svg class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <h2 class="text-base font-bold">Process Interrupted</h2>
-                </header>
-                <textarea id="errorText" readonly class="w-full p-3 bg-white text-red-700 font-mono text-xs rounded-lg border border-red-200 focus:outline-none h-24 resize-none"></textarea>
-                <button type="button" id="copyErrorBtn" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer">Copy Error Details</button>
+            <!-- Live Debug Log Terminal (Compact) -->
+            <div id="loggingMonitorBox" class="border border-slate-800 bg-slate-950/90 rounded-xl p-2.5 space-y-1.5">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-1">
+                    <span class="text-[9px] font-bold uppercase tracking-wider text-green-400 font-mono">Live Debug Telemetry</span>
+                    <button type="button" id="clearLogsBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[9px] font-bold font-mono transition cursor-pointer">Clear</button>
+                </div>
+                <div id="liveLogsTerminal" class="w-full bg-black text-green-400 font-mono text-[10px] rounded p-2 h-20 overflow-y-auto select-all border border-slate-900 space-y-1 font-medium leading-tight">
+                    [00:00:00] SYSTEM READY: Waiting for user action...
+                </div>
+            </div>
+
+            <!-- Error State View -->
+            <article id="errorState" class="state-hidden bg-red-950/40 border border-red-500/30 rounded-xl p-2.5 space-y-1.5">
+                <div class="flex items-center justify-between text-red-400">
+                    <span class="text-xs font-bold flex items-center">
+                        <svg class="h-3.5 w-3.5 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Remediation Failed
+                    </span>
+                    <button type="button" id="copyErrorBtn" class="bg-red-900/60 hover:bg-red-800 text-red-200 px-2 py-0.5 rounded text-[9px] font-bold transition cursor-pointer">Copy Error Log</button>
+                </div>
+                <textarea id="errorText" readonly class="w-full p-2 bg-slate-950 text-red-300 font-mono text-[10px] rounded border border-red-900/50 focus:outline-none h-14 resize-none leading-tight"></textarea>
             </article>
 
-            <section id="resultsDashboard" class="state-hidden border-t border-slate-200 pt-6 space-y-4">
-                <h2 class="text-lg font-bold text-slate-900 uppercase tracking-wide text-center">Results Summary</h2>
-                
-                <section class="grid grid-cols-3 gap-3">
-                    <article class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
-                        <small class="block text-xs font-bold uppercase text-blue-700">Score</small>
-                        <output id="scoreMetric" class="block text-2xl font-black text-blue-900">0%</output>
-                    </article>
-                    <article class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-center">
-                        <small class="block text-xs font-bold uppercase text-slate-700">Pages</small>
-                        <output id="pagesMetric" class="block text-2xl font-black text-slate-900">0</output>
-                    </article>
-                    <article class="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
-                        <small class="block text-xs font-bold uppercase text-green-700">Fixes</small>
-                        <output id="imagesMetric" class="block text-2xl font-black text-green-900">0</output>
-                    </article>
-                </section>
+            <!-- Results Summary Panel -->
+            <section id="resultsDashboard" class="state-hidden space-y-2.5 pt-2 border-t border-slate-800">
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-blue-900/30 border border-blue-500/20 rounded-xl p-2 text-center">
+                        <span class="block text-[9px] uppercase font-bold text-blue-400 tracking-wider">Score</span>
+                        <output id="scoreMetric" class="block text-base md:text-lg font-black text-blue-200">0%</output>
+                    </div>
+                    <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-2 text-center">
+                        <span class="block text-[9px] uppercase font-bold text-slate-400 tracking-wider">Pages</span>
+                        <output id="pagesMetric" class="block text-base md:text-lg font-black text-slate-200">0</output>
+                    </div>
+                    <div class="bg-emerald-900/30 border border-emerald-500/20 rounded-xl p-2 text-center">
+                        <span class="block text-[9px] uppercase font-bold text-emerald-400 tracking-wider">Fixes</span>
+                        <output id="imagesMetric" class="block text-base md:text-lg font-black text-emerald-200">0</output>
+                    </div>
+                </div>
 
-                <article class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Automated Actions</h3>
-                    <ul id="recommendationsList" class="space-y-1 text-sm text-slate-800"></ul>
-                </article>
+                <div class="bg-slate-900/50 rounded-xl p-2.5 border border-slate-800 max-h-20 overflow-y-auto">
+                    <ul id="recommendationsList" class="space-y-1 text-[11px] text-slate-300"></ul>
+                </div>
 
-                <a id="downloadBtn" href="#" target="_blank" class="flex items-center justify-center py-4 px-6 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-md transition text-base">
+                <a id="downloadBtn" href="#" target="_blank" class="flex items-center justify-center py-2 px-4 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition text-xs cursor-pointer border-b-2 border-emerald-800">
                     Download Remediated PDF
                 </a>
             </section>
 
-        </section>
+        </div>
     </main>
 
-    <footer class="border-t border-slate-200 bg-white py-6 mt-8">
-        <aside class="max-w-3xl mx-auto px-4 text-center text-xs font-medium text-slate-500">
-            <p>&copy; 2026 AccessShift. Built for document accessibility compliance.</p>
-        </aside>
+    <!-- Footer Footer -->
+    <footer class="w-full text-center py-1 flex-none text-[10px] text-slate-600 font-medium">
+        &copy; 2026 AccessShift AI
     </footer>
 
-    <template id="recItemTemplate">
-        <li class="flex items-start font-medium">
-            <mark class="bg-transparent text-green-600 mr-2 font-bold select-none">✓</mark>
-            <slot name="text"></slot>
-        </li>
-    </template>
-
     <script>
-        const LOG_PREFIX = '[AccessShift Engine]';
-        const log = (msg, data = '') => console.log(`${LOG_PREFIX} ${msg}`, data);
-        const logError = (msg, err = '') => console.error(`${LOG_PREFIX} ERROR: ${msg}`, err);
-
         const dropZone = document.getElementById('dropZone');
+        const browseBtn = document.getElementById('browseBtn');
         const fileInput = document.getElementById('fileInput');
         const apiInput = document.getElementById('apiEndpoint');
         const fileLabel = document.getElementById('fileLabel');
         const submitBtn = document.getElementById('submitBtn');
         const copyErrorBtn = document.getElementById('copyErrorBtn');
-        const recTemplate = document.getElementById('recItemTemplate');
+        const clearLogsBtn = document.getElementById('clearLogsBtn');
+        const liveLogsTerminal = document.getElementById('liveLogsTerminal');
+        const toastNotice = document.getElementById('toastNotice');
 
         let selectedFile = null;
 
-        const savedEndpoint = localStorage.getItem('saved_pdf_endpoint');
-        if (savedEndpoint) {
-            apiInput.value = savedEndpoint;
-            log('Loaded saved endpoint from LocalStorage:', savedEndpoint);
+        /* Inline Toast Notification helper to eliminate alert() popups */
+        function showNotice(msg) {
+            toastNotice.textContent = msg;
+            toastNotice.classList.remove('state-hidden');
+            setTimeout(() => toastNotice.classList.add('state-hidden'), 4000);
         }
 
-        fileInput.addEventListener('change', (e) => {
-            log('File input change event triggered');
-            if (e.target.files && e.target.files.length > 0) {
-                updateSelectedFile(e.target.files[0]);
+        // Restore endpoint parameter from localStorage
+        if (localStorage.getItem('saved_pdf_endpoint')) {
+            apiInput.value = localStorage.getItem('saved_pdf_endpoint');
+        }
+
+        function log(message, type = 'INFO') {
+            const timestamp = new Date().toTimeString().split(' ')[0];
+            const logLine = document.createElement('div');
+            
+            if (type === 'ERROR') {
+                logLine.className = 'text-red-400 font-bold';
+            } else if (type === 'SUCCESS') {
+                logLine.className = 'text-emerald-400 font-bold';
+            } else {
+                logLine.className = 'text-green-400';
             }
+            
+            logLine.innerText = "[" + timestamp + "] " + type + ": " + message;
+            liveLogsTerminal.appendChild(logLine);
+            liveLogsTerminal.scrollTop = liveLogsTerminal.scrollHeight;
+            console.log("[" + timestamp + "] [" + type + "] " + message);
+        }
+
+        clearLogsBtn.addEventListener('click', () => {
+            liveLogsTerminal.innerHTML = '';
+            log('Logs cleared.');
         });
 
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('border-blue-600', 'bg-blue-50/50');
+        browseBtn.addEventListener('click', (e) => { 
+            e.stopPropagation(); 
+            log('Browse button clicked.');
+            fileInput.click(); 
         });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('border-blue-600', 'bg-blue-50/50');
+        
+        fileInput.addEventListener('change', (e) => { 
+            log('File input changed.');
+            if (e.target.files.length) updateSelectedFile(e.target.files[0]); 
         });
-
+        
+        dropZone.addEventListener('click', () => { 
+            log('Dropzone clicked.');
+            fileInput.click(); 
+        });
+        
+        dropZone.addEventListener('dragover', (e) => { 
+            e.preventDefault(); 
+            dropZone.classList.add('border-blue-500', 'bg-slate-800/80'); 
+        });
+        
+        dropZone.addEventListener('dragleave', () => { 
+            dropZone.classList.remove('border-blue-500', 'bg-slate-800/80'); 
+        });
+        
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropZone.classList.remove('border-blue-600', 'bg-blue-50/50');
-            log('File dropped');
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                updateSelectedFile(e.dataTransfer.files[0]);
-            }
+            dropZone.classList.remove('border-blue-500', 'bg-slate-800/80');
+            log('File dropped onto container.');
+            if (e.dataTransfer.files.length) updateSelectedFile(e.dataTransfer.files[0]);
         });
 
         copyErrorBtn.addEventListener('click', () => {
             const errVal = document.getElementById('errorText').value;
-            navigator.clipboard.writeText(errVal).then(() => {
-                log('Error text copied to clipboard');
-                copyErrorBtn.textContent = 'Copied!';
-                setTimeout(() => copyErrorBtn.textContent = 'Copy Error Details', 2000);
-            }).catch(err => logError('Copy failed', err));
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(errVal);
+            } else {
+                document.getElementById('errorText').select();
+                document.execCommand('copy');
+            }
+            log('Error log copied to clipboard.');
+            copyErrorBtn.textContent = 'Copied!';
+            setTimeout(() => copyErrorBtn.textContent = 'Copy Error Log', 2000);
         });
 
         function updateSelectedFile(file) {
-            log('Evaluating file selection:', file ? file.name : 'null');
-            if (file && (file.name.toLowerCase().endsWith('.pdf') || file.type === "application/pdf")) {
+            if (!file) {
+                log('No file captured.', 'ERROR');
+                return;
+            }
+            log('File selected: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)');
+            
+            if (file.name.toLowerCase().endsWith('.pdf') || file.type === "application/pdf") {
                 selectedFile = file;
-                const sizeMB = (selectedFile.size / (1024 * 1024)).toFixed(2);
-                fileLabel.textContent = `Selected: ${selectedFile.name} (${sizeMB} MB)`;
+                const sizeMB = (selectedFile.size / (1024 * 1024)).toFixed(1);
+                fileLabel.innerText = `${selectedFile.name} (${sizeMB} MB)`;
                 document.getElementById('errorState').classList.add('state-hidden');
-                log('File successfully updated and staged', { name: selectedFile.name, size: selectedFile.size });
+                log('PDF file validated and staged.', 'SUCCESS');
             } else {
-                logError('File validation failed. Selected item was not a PDF.');
-                alert("Please select a valid PDF file (.pdf).");
+                log('Invalid file type rejected.', 'ERROR');
+                showNotice("Please select a valid PDF file ending in .pdf");
             }
         }
 
         submitBtn.addEventListener('click', async () => {
-            log('Submit button clicked');
+            log('Initiating remediation sequence...');
+            
             if (!selectedFile) {
-                logError('Submission aborted: No file selected');
-                alert("Please select a PDF document first.");
+                log('Remediation aborted: No file selected.', 'ERROR');
+                showNotice("Please choose a PDF document first.");
                 return;
             }
 
             let baseEndpoint = apiInput.value.trim();
+            
             if (!baseEndpoint) {
-                logError('Submission aborted: Endpoint input empty');
-                alert("Please provide the server address in step 1.");
+                log('Remediation aborted: Server URL missing.', 'ERROR');
+                showNotice("Please enter a valid server URL above.");
                 return;
             }
 
-            if (baseEndpoint.endsWith('/')) baseEndpoint = baseEndpoint.slice(0, -1);
+            if (baseEndpoint.endsWith('/')) {
+                baseEndpoint = baseEndpoint.slice(0, -1);
+            }
+            
             localStorage.setItem('saved_pdf_endpoint', baseEndpoint);
 
             document.getElementById('loadingState').classList.remove('state-hidden');
@@ -254,58 +306,62 @@
             formData.append("file", selectedFile);
 
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 120000);
-
-            log('Initiating POST request to API:', `${baseEndpoint}/remediate`);
+            const timeoutId = setTimeout(() => {
+                log('Request timeout threshold exceeded (120s).', 'ERROR');
+                controller.abort();
+            }, 120000);
 
             try {
-                const response = await fetch(`${baseEndpoint}/remediate`, {
+                const targetUrl = baseEndpoint + "/remediate";
+                log('Posting FormData payload to: ' + targetUrl);
+                
+                const response = await fetch(targetUrl, {
                     method: "POST",
                     body: formData,
                     signal: controller.signal
                 });
                 
                 clearTimeout(timeoutId);
-                log('Server response received', { status: response.status });
+                log('Server responded with HTTP status code: ' + response.status);
 
                 if (!response.ok) {
-                    throw new Error(`Server returned HTTP ${response.status}`);
+                    throw new Error("HTTP Network Error Status: " + response.status);
                 }
 
                 const data = await response.json();
-                log('Payload parsed successfully', data);
                 
                 if (data.status === "success") {
-                    document.getElementById('scoreMetric').textContent = `${data.score}%`;
-                    document.getElementById('pagesMetric').textContent = data.totalPages;
-                    document.getElementById('imagesMetric').textContent = data.imagesFixed;
+                    log('Remediation completed successfully.', 'SUCCESS');
+                    document.getElementById('scoreMetric').innerText = data.score + "%";
+                    document.getElementById('pagesMetric').innerText = data.totalPages;
+                    document.getElementById('imagesMetric').innerText = data.imagesFixed;
                     
                     const recList = document.getElementById('recommendationsList');
                     recList.innerHTML = "";
-                    
                     if (Array.isArray(data.recommendations)) {
                         data.recommendations.forEach(rec => {
-                            const clone = recTemplate.content.cloneNode(true);
-                            const slot = clone.querySelector('slot[name="text"]');
-                            slot.replaceWith(document.createTextNode(rec));
-                            recList.appendChild(clone);
+                            const li = document.createElement('li');
+                            li.className = "flex items-[3px] text-slate-300";
+                            li.innerHTML = '<span class="text-emerald-400 font-bold mr-1.5 select-none">✓</span>' + rec;
+                            recList.appendChild(li);
                         });
                     }
 
-                    document.getElementById('downloadBtn').href = `${baseEndpoint}${data.downloadUrl}`;
+                    const downloadRoute = baseEndpoint + data.downloadUrl;
+                    document.getElementById('downloadBtn').href = downloadRoute;
                     document.getElementById('resultsDashboard').classList.remove('state-hidden');
-                    log('Dashboard populated and displayed');
                 } else {
-                    throw new Error(data.message || "Engine failed to process document.");
+                    throw new Error("System Exception: " + data.message);
                 }
             } catch (err) {
                 clearTimeout(timeoutId);
-                logError('Request failed:', err);
+                log('Remediation process failed: ' + err.message, 'ERROR');
+                
                 const errorBox = document.getElementById('errorText');
                 if (err.name === 'AbortError') {
-                    errorBox.value = "Error: Connection timed out (120s).\n\nFree tier instances may be starting up. Wait 20 seconds and click submit again.";
+                    errorBox.value = "Error: Timeout (120s limit reached).\nFree servers sleep when idle. Wait 15 seconds and try clicking 'Start Remediation' again.";
                 } else {
-                    errorBox.value = `${err.stack || err.message}\n\nTroubleshooting:\nEnsure the server endpoint is correct and running.`;
+                    errorBox.value = (err.stack || err.message) + "\n\nEnsure backend endpoint URL is active and CORS is enabled.";
                 }
                 document.getElementById('errorState').classList.remove('state-hidden');
             } finally {
