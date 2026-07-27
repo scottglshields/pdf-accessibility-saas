@@ -1,8 +1,3 @@
-When the application hangs on the "Communicating with Render processing pipeline backend engine..." loader without triggering an explicit error box, it indicates that the browser's fetch() call is waiting indefinitely for a server response.
-On [Render's Free Tier](https://render.com/articles/platforms-with-a-real-free-tier-for-developers-in-2026), web services automatically spin down after 15 minutes of inactivity. When a browser drops a file connection on a cold application, the wake-up period takes between 30 and 60 seconds. Because the original script didn't establish a request deadline, the page remains locked in a looping handshake without ever updating the debugging display. [1, 2] 
-To resolve this issue, the browser script must incorporate an intentional Network Timeout Configuration. If the server fails to reply within 10 seconds, the frontend will automatically cancel the processing attempt, surface an explicit warning, and output actionable error traces.
-## The Solution: Upgraded index.html File
-Navigate to your GitHub repository, open index.html, select all elements, and replace them completely with this layout containing built-in timeout protections:
 
 <!DOCTYPE html>
 <html lang="en">
