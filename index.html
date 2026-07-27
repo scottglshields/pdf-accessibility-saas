@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessShift AI - Free PDF Accessibility Remediation</title>
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">AccessShift AI</span>
+            <span class="bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded-full font-semibold">Free App</span>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-12">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl mb-4">Automated PDF Remediation</h1>
+            <p class="text-lg text-slate-600 max-w-xl mx-auto">Upload any PDF file. Our engine analyzes compliance health against PDF/UA standards and applies automated fixes instantly.</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-8 mb-8">
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Configure Backend Endpoint</label>
+                <input type="text" id="apiEndpoint" class="w-full p-3 border border-slate-300 rounded-lg text-sm bg-slate-50 font-mono text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="https://onrender.com">
+            </div>
+
+            <div id="dropZone" class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl p-10 text-center cursor-pointer bg-slate-50/50 transition flex flex-col items-center justify-center">
+                <svg class="h-12 w-12 text-slate-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <p class="text-base font-medium text-slate-700">Drag and drop your PDF here</p>
+                <input type="file" id="fileInput" accept=".pdf" class="hidden">
+                <button type="button" onclick="document.getElementById('fileInput').click()" class="mt-4 bg-white border border-slate-300 text-slate-700 font-semibold px-4 py-2 rounded-lg text-sm shadow-sm hover:bg-slate-50 transition">Select File</button>
+            </div>
+
+            <div id="loadingState" class="hidden mt-6 text-center py-6">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-blue-600 rounded-full"></div>
+                <p class="text-sm font-semibold text-slate-600 mt-3 animate-pulse">Running remediation tags and Gemini alt-text processing...</p>
+            </div>
+
+            <div id="resultsDashboard" class="hidden mt-8 border-t border-slate-100 pt-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center">
+                        <span class="block text-xs font-medium uppercase text-slate-500">Compliance Health</span>
+                        <span id="scoreMetric" class="block text-4xl font-extrabold text-blue-600 mt-1">0%</span>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center">
+                        <span class="block text-xs font-medium uppercase text-slate-500">Total Pages</span>
+                        <span id="pagesMetric" class="block text-4xl font-extrabold text-slate-800 mt-1">0</span>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center">
+                        <span class="block text-xs font-medium uppercase text-slate-500">AI Alt-Texts Added</span>
+                        <span id="imagesMetric" class="block text-4xl font-extrabold text-indigo-600 mt-1">0</span>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+                    <h3 class="text-sm font-bold text-amber-900 mb-2">Remediation Action Log</h3>
+                    <ul id="recommendationsList" class="space-y-2 text-sm text-amber-800 list-disc list-inside"></ul>
+                </div>
+
+                <div class="text-center">
+                    <a id="downloadBtn" href="#" target="_blank" class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-sm transition text-base w-full sm:w-auto">Download Remediated PDF</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const apiInput = document.getElementById('apiEndpoint');
+
+        if (localStorage.getItem('saved_pdf_endpoint')) {
+            apiInput.value = localStorage.getItem('saved_pdf_endpoint');
+        }
+
+        fileInput.addEventListener('change', (e) => handleUpload(e.target.files[0]));
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-blue-500'); });
+        dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-blue-500'); });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-blue-500');
+            if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);
+        });
+
+        async function handleUpload(file) {
+            if (!file) return;
+            
+            let baseEndpoint = apiInput.value.trim();
+            if (!baseEndpoint) {
+                alert("Please paste your Render backend web URL first.");
+                return;
+            }
+            if (baseEndpoint.endsWith('/')) baseEndpoint = baseEndpoint.slice(0, -1);
+            localStorage.setItem('saved_pdf_endpoint', baseEndpoint);
+
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('resultsDashboard').classList.add('hidden');
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch(`${baseEndpoint}/remediate`, {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                
+                if (data.status === "success") {
+                    document.getElementById('scoreMetric').innerText = `${data.score}%`;
+                    document.getElementById('pagesMetric').innerText = data.totalPages;
+                    document.getElementById('imagesMetric').innerText = data.imagesFixed;
+                    
+                    const recList = document.getElementById('recommendationsList');
+                    recList.innerHTML = "";
+                    data.recommendations.forEach(rec => {
+                        const li = document.createElement('li');
+                        li.innerText = rec;
+                        recList.appendChild(li);
+                    });
+
+                    document.getElementById('downloadBtn').href = `${baseEndpoint}${data.downloadUrl}`;
+                    document.getElementById('resultsDashboard').classList.remove('hidden');
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+            } catch (err) {
+                alert("Could not connect to the backend API.");
+                console.error(err);
+            } finally {
+                document.getElementById('loadingState').classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
