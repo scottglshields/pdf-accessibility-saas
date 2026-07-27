@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AccessShift AI - Professional PDF Accessibility Remediation</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <style>
+    <style>
         .state-hidden { display: none !important; }
     </style>
 </head>
@@ -135,22 +135,22 @@
         }
 
 
-fileInput.addEventListener('change', (e) => { if (e.target.files.length) updateSelectedFile(e.target.files); });
+fileInput.addEventListener('change', (e) => { if (e.target.files.length) updateSelectedFile(e.target.files[0]); });
 dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-blue-500', 'bg-blue-500/5'); });
 dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-blue-500', 'bg-blue-500/5'); });
 dropZone.addEventListener('drop', (e) => {
 e.preventDefault();
 dropZone.classList.remove('border-blue-500', 'bg-blue-500/5');
-if (e.dataTransfer.files.length) updateSelectedFile(e.dataTransfer.files);
+if (e.dataTransfer.files.length) updateSelectedFile(e.dataTransfer.files[0]);
 });
 copyErrorBtn.addEventListener('click', () => {
 navigator.clipboard.writeText(document.getElementById('errorText').value);
 alert('Copied error trace to clipboard.');
 });
 function updateSelectedFile(file) {
-if (file && file.type === "application/pdf") {
+if (file && (file.name.toLowerCase().endsWith('.pdf') || file.type === "application/pdf")) {
 selectedFile = file;
-fileLabel.innerText = "Selected File: " + file.name + " (" + (file.size / (1024 * 1024)).toFixed(2) + " MB)";
+fileLabel.innerText = "Selected File: " + selectedFile.name + " (" + (selectedFile.size / (1024 * 1024)).toFixed(2) + " MB)";
 document.getElementById('errorState').classList.add('state-hidden');
 } else {
 alert("Please make sure to select a valid PDF file extension layout.");
@@ -180,7 +180,7 @@ body: formData
 });
 if (!response.ok) {
 throw new Error("HTTP Error Status: " + response.status + " - Server rejected request pipeline schema standard variables.");
-} [2] 
+}
 const data = await response.json();
 if (data.status === "success") {
 document.getElementById('scoreMetric').innerText = data.score + "%";
@@ -206,5 +206,4 @@ document.getElementById('errorState').classList.remove('state-hidden');
 document.getElementById('loadingState').classList.add('state-hidden');
 }
 });</script></body></html>
-
 
