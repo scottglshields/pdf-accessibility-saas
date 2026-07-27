@@ -12,7 +12,7 @@
       "@type": "WebApplication",
       "name": "AccessShift AI",
       "url": "https://accessshift.ai",
-      "description": "Simple automated PDF accessibility fixer designed for high readability and ease of use.",
+      "description": "Senior-friendly automated PDF accessibility fixer designed for WCAG compliance.",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "All",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
@@ -24,7 +24,7 @@
 
     <style>
         body {
-            background-color: #f1f5f9;
+            background-color: #0f172a; /* Deep high-contrast slate background */
             color: #0f172a;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -32,146 +32,150 @@
 
         .state-hidden { display: none !important; }
 
-        /* Senior-friendly high contrast focus indicators */
+        /* Ultra high-contrast focus rings for elderly accessibility */
         button:focus-visible, input:focus-visible, a:focus-visible {
-            outline: 4px solid #2563eb !important;
+            outline: 5px solid #facc15 !important; /* Bright yellow high-visibility focus */
             outline-offset: 3px !important;
         }
 
         /* Custom scrollbar for small containers */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 9999px; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 9999px; }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden flex flex-col justify-between p-2 sm:p-4 font-sans antialiased text-slate-900">
+<body class="h-screen w-screen overflow-hidden flex flex-col justify-between p-2 sm:p-4 md:p-6 font-sans antialiased text-slate-900 bg-slate-900">
 
-    <header class="w-full max-w-xl mx-auto flex items-center justify-between flex-none pb-1">
+    <header class="w-full max-w-2xl mx-auto flex items-center justify-between flex-none pb-1 sm:pb-2">
         <div class="flex items-center space-x-3">
-            <div class="h-10 w-10 sm:h-11 sm:w-11 bg-blue-700 rounded-xl flex items-center justify-center font-black text-white text-base shadow-md border-2 border-slate-900">
+            <div class="h-10 w-10 sm:h-12 sm:w-12 bg-blue-600 rounded-2xl flex items-center justify-center font-black text-white text-lg sm:text-xl shadow-lg border-2 border-white">
                 AS
             </div>
             <div>
-                <h1 class="font-extrabold tracking-tight text-base sm:text-lg text-slate-950 leading-tight">
-                    AccessShift <span class="text-blue-700 font-black text-xs uppercase bg-blue-100 px-1.5 py-0.5 rounded border border-blue-300">Fixer</span>
+                <h1 class="font-black tracking-tight text-base sm:text-xl md:text-2xl text-white leading-tight flex items-center gap-2">
+                    AccessShift <span class="text-yellow-300 font-extrabold text-xs sm:text-sm uppercase bg-blue-900 px-2 py-0.5 rounded-lg border border-blue-400">Fixer</span>
                 </h1>
-                <p class="text-[11px] font-bold text-slate-600">Easy PDF Accessibility</p>
+                <p class="text-xs sm:text-sm font-bold text-slate-300">Easy PDF Accessibility</p>
             </div>
         </div>
 
-        <!-- System Status Badge -->
-        <div class="flex items-center space-x-2 bg-emerald-100 border-2 border-emerald-600 px-3 py-1 rounded-full">
-            <span class="h-3 w-3 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span class="text-xs font-black text-emerald-900 uppercase tracking-wide">Ready</span>
+        <!-- High-contrast status indicator -->
+        <div class="flex items-center space-x-2 bg-emerald-950 border-2 border-emerald-400 px-3 py-1 sm:py-1.5 rounded-full shadow-md">
+            <span class="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs sm:text-sm font-black text-emerald-200 uppercase tracking-wide">Ready</span>
         </div>
     </header>
 
-    <main class="flex-1 max-w-xl mx-auto w-full flex flex-col justify-center my-auto overflow-hidden">
-        <div class="bg-white border-4 border-slate-800 rounded-2xl p-3 sm:p-5 shadow-2xl space-y-3 max-h-full flex flex-col justify-between">
+    <main class="flex-1 min-h-0 max-w-2xl mx-auto w-full flex flex-col justify-center my-auto">
+        <div class="bg-white border-4 sm:border-6 border-slate-800 rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-2xl space-y-2 sm:space-y-4 max-h-full flex flex-col justify-between overflow-hidden">
             
             <!-- Senior Friendly Heading -->
-            <div class="text-center space-y-0.5 border-b-2 border-slate-200 pb-2 flex-none">
-                <h2 class="text-lg sm:text-xl font-black text-slate-950 tracking-tight">Fix Your Document in 3 Easy Steps</h2>
+            <div class="text-center space-y-1 border-b-2 sm:border-b-4 border-slate-200 pb-2 flex-none">
+                <h2 class="text-base sm:text-2xl md:text-3xl font-black text-slate-950 tracking-tight">
+                    Fix Your Document in 3 Easy Steps
+                </h2>
             </div>
 
-            <!-- Large Banner Notification Bar (Replaces native alerts) -->
-            <aside id="toastNotice" class="state-hidden bg-amber-100 border-3 border-amber-600 rounded-xl p-2 sm:p-2.5 text-xs sm:text-sm text-amber-950 text-center font-black shadow-md flex-none"></aside>
+            <aside id="toastNotice" class="state-hidden bg-amber-100 border-4 border-amber-600 rounded-xl p-2.5 sm:p-3 text-xs sm:text-base text-amber-950 text-center font-black shadow-md flex-none">
+            </aside>
 
-            <!-- Step 1: Web Address Input -->
-            <div class="space-y-1 flex-none">
-                <label for="apiEndpoint" class="block text-xs sm:text-sm font-black uppercase tracking-wide text-slate-800">
-                    Step 1: Web Address (Server)
+            <div class="space-y-1 sm:space-y-1.5 flex-none">
+                <label for="apiEndpoint" class="block text-xs sm:text-base md:text-lg font-black uppercase tracking-wide text-slate-900">
+                    Step 1: Web Address (Server Link)
                 </label>
                 <input type="url" id="apiEndpoint" 
-                    class="w-full px-3 py-2 bg-slate-50 border-3 border-slate-400 rounded-xl text-xs sm:text-sm font-mono text-blue-900 font-bold focus:bg-white focus:border-blue-600 transition shadow-inner" 
+                    class="w-full px-3 py-2 sm:py-3 bg-slate-50 border-3 sm:border-4 border-slate-400 rounded-xl sm:rounded-2xl text-xs sm:text-base font-mono text-blue-900 font-extrabold focus:bg-white focus:border-blue-700 transition shadow-inner" 
                     placeholder="https://onrender.com">
             </div>
 
-            <!-- Step 2: File Upload Zone -->
-            <fieldset class="border-0 p-0 m-0 flex-none">
-                <legend class="text-xs sm:text-sm font-black uppercase tracking-wide text-slate-800 mb-1">
+            <fieldset class="border-0 p-0 m-0 flex-none space-y-1">
+                <legend class="text-xs sm:text-base md:text-lg font-black uppercase tracking-wide text-slate-900">
                     Step 2: Choose Your PDF File
                 </legend>
-                <div id="dropZone" class="group border-3 border-dashed border-slate-400 hover:border-blue-600 bg-slate-50 hover:bg-blue-50 rounded-xl p-3 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-2">
-                    <svg class="h-8 w-8 text-blue-700 flex-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <div id="dropZone" class="group border-3 sm:border-4 border-dashed border-slate-400 hover:border-blue-700 bg-slate-50 hover:bg-blue-50/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-1.5 sm:space-y-2">
+                    <svg class="h-7 w-7 sm:h-10 sm:w-10 text-blue-700 flex-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 13h6m-3-3v6m-9 1V4a2 2 0 012-2h6l2 2h6a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                     </svg>
                     
-                    <output id="fileLabel" class="text-xs sm:text-sm font-extrabold text-slate-900 block truncate max-w-full px-2">
+                    <output id="fileLabel" class="text-xs sm:text-base md:text-lg font-extrabold text-slate-950 block truncate max-w-full px-2">
                         Click here or drop your PDF document
                     </output>
 
                     <input type="file" id="fileInput" accept=".pdf,application/pdf" class="sr-only">
                     
-                    <button type="button" id="browseBtn" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-950 text-white text-xs sm:text-sm font-black rounded-lg border-2 border-slate-900 transition shadow cursor-pointer">
+                    <button type="button" id="browseBtn" class="px-4 py-1.5 sm:py-2.5 bg-slate-900 hover:bg-black text-white text-xs sm:text-base font-black rounded-xl border-2 sm:border-3 border-slate-900 transition shadow-lg cursor-pointer">
                         📁 Find File on Computer
                     </button>
                 </div>
             </fieldset>
 
-            <!-- Step 3: Big Main Action Button -->
-            <button type="button" id="submitBtn" class="w-full bg-blue-700 hover:bg-blue-800 active:scale-[0.98] text-white font-black py-3 px-4 rounded-xl shadow-lg transition text-sm sm:text-base tracking-wide flex items-center justify-center cursor-pointer border-b-4 border-blue-950 flex-none">
-                <span>⚡ Step 3: START FIXING DOCUMENT</span>
+            <button type="button" id="submitBtn" class="w-full bg-blue-700 hover:bg-blue-800 active:scale-[0.98] text-white font-black py-2.5 sm:py-4 px-4 rounded-xl sm:rounded-2xl shadow-xl transition text-sm sm:text-xl md:text-2xl tracking-wide flex items-center justify-center cursor-pointer border-b-4 sm:border-b-6 border-blue-950 flex-none">
+                <span>⚡ Step 3: START FIXING DOCUMENT NOW</span>
             </button>
 
-            <!-- Loading Indicator Container -->
-            <article id="loadingState" class="state-hidden bg-blue-50 border-3 border-blue-500 rounded-xl p-3 text-center space-y-1.5 flex-none">
-                <div class="animate-spin inline-block w-6 h-6 border-3 border-blue-700 border-t-transparent rounded-full" role="status"></div>
-                <h3 class="text-xs sm:text-sm font-black text-blue-950">Please Wait... Fixing Your PDF</h3>
-                <p class="text-[11px] font-bold text-blue-800">Checking text readability, contrast, and image descriptions.</p>
+            <article id="loadingState" class="state-hidden bg-blue-50 border-4 border-blue-600 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center space-y-2 flex-none">
+                <div class="animate-spin inline-block w-8 h-8 sm:w-10 sm:h-10 border-4 border-blue-700 border-t-transparent rounded-full" role="status"></div>
+                <h3 class="text-sm sm:text-xl font-black text-blue-950">Please Wait... Fixing Your PDF</h3>
+                <p class="text-xs sm:text-base font-bold text-blue-900">Checking text readability, contrast, and image descriptions.</p>
             </article>
 
-            <!-- Error Notification Banner -->
-            <article id="errorState" class="state-hidden bg-red-50 border-3 border-red-500 rounded-xl p-2.5 space-y-1.5 flex-none">
-                <div class="flex items-center justify-between text-red-900">
-                    <span class="text-xs sm:text-sm font-black flex items-center">
+            <article id="errorState" class="state-hidden bg-red-50 border-4 border-red-600 rounded-xl sm:rounded-2xl p-3 space-y-2 flex-none">
+                <div class="flex items-center justify-between text-red-950">
+                    <span class="text-xs sm:text-lg font-black flex items-center">
                         ⚠️ Unable to Complete Fix
                     </span>
-                    <button type="button" id="copyErrorBtn" class="bg-red-800 hover:bg-red-950 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer">
-                        Copy Details
+                    <button type="button" id="copyErrorBtn" class="bg-red-800 hover:bg-red-950 text-white px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer shadow">
+                        Copy Error Details
                     </button>
                 </div>
-                <textarea id="errorText" readonly class="w-full p-2 bg-white text-red-900 font-mono text-[10px] rounded-lg border border-red-300 focus:outline-none h-14 resize-none leading-tight font-bold"></textarea>
+                <textarea id="errorText" readonly class="w-full p-2.5 bg-white text-red-950 font-mono text-xs sm:text-sm rounded-xl border-2 border-red-300 focus:outline-none h-16 sm:h-20 resize-none leading-tight font-bold"></textarea>
             </article>
 
-            <!-- Results Summary View -->
-            <section id="resultsDashboard" class="state-hidden space-y-2 pt-2 border-t-2 border-slate-300 flex-none">
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-blue-50 border-2 border-blue-400 rounded-xl p-1.5 sm:p-2 text-center">
-                        <span class="block text-[10px] font-black uppercase text-blue-800">Score</span>
-                        <output id="scoreMetric" class="block text-sm sm:text-base font-black text-blue-950">0%</output>
+            <section id="resultsDashboard" class="state-hidden space-y-2.5 sm:space-y-3 pt-2 border-t-3 border-slate-300 flex-none">
+                <div class="grid grid-cols-3 gap-2 sm:gap-3">
+                    <div class="bg-blue-50 border-3 border-blue-500 rounded-xl sm:rounded-2xl p-1.5 sm:p-2.5 text-center shadow-sm">
+                        <span class="block text-[10px] sm:text-xs font-black uppercase text-blue-900">Score</span>
+                        <output id="scoreMetric" class="block text-base sm:text-2xl md:text-3xl font-black text-blue-950">0%</output>
                     </div>
-                    <div class="bg-slate-100 border-2 border-slate-400 rounded-xl p-1.5 sm:p-2 text-center">
-                        <span class="block text-[10px] font-black uppercase text-slate-700">Pages</span>
-                        <output id="pagesMetric" class="block text-sm sm:text-base font-black text-slate-950">0</output>
+                    <div class="bg-slate-100 border-3 border-slate-500 rounded-xl sm:rounded-2xl p-1.5 sm:p-2.5 text-center shadow-sm">
+                        <span class="block text-[10px] sm:text-xs font-black uppercase text-slate-800">Pages</span>
+                        <output id="pagesMetric" class="block text-base sm:text-2xl md:text-3xl font-black text-slate-950">0</output>
                     </div>
-                    <div class="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-1.5 sm:p-2 text-center">
-                        <span class="block text-[10px] font-black uppercase text-emerald-800">Fixes</span>
-                        <output id="imagesMetric" class="block text-sm sm:text-base font-black text-emerald-950">0</output>
+                    <div class="bg-emerald-50 border-3 border-emerald-500 rounded-xl sm:rounded-2xl p-1.5 sm:p-2.5 text-center shadow-sm">
+                        <span class="block text-[10px] sm:text-xs font-black uppercase text-emerald-900">Fixes</span>
+                        <output id="imagesMetric" class="block text-base sm:text-2xl md:text-3xl font-black text-emerald-950">0</output>
                     </div>
                 </div>
 
-                <div class="bg-slate-50 rounded-xl p-2 border-2 border-slate-300 max-h-16 overflow-y-auto">
-                    <ul id="recommendationsList" class="space-y-1 text-[11px] font-bold text-slate-800"></ul>
+                <div class="bg-slate-50 rounded-xl p-2 sm:p-3 border-2 sm:border-3 border-slate-300 max-h-20 sm:max-h-28 overflow-y-auto">
+                    <ul id="recommendationsList" class="space-y-1 text-xs sm:text-base font-bold text-slate-900"></ul>
                 </div>
 
-                <a id="downloadBtn" href="#" target="_blank" class="flex items-center justify-center py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl shadow-md transition text-xs sm:text-sm cursor-pointer border-b-4 border-emerald-900">
+                <a id="downloadBtn" href="#" target="_blank" class="flex items-center justify-center py-2.5 sm:py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl sm:rounded-2xl shadow-lg transition text-xs sm:text-lg md:text-xl cursor-pointer border-b-4 sm:border-b-6 border-emerald-950">
                     📥 DOWNLOAD FIXED PDF
                 </a>
             </section>
 
-            <!-- Collapsible Senior-Friendly Technical Support Logs -->
-            <div class="border-t border-slate-200 pt-1.5 flex-none">
-                <button type="button" id="toggleLogsBtn" class="text-[10px] font-bold text-slate-600 hover:text-slate-900 flex items-center justify-between w-full px-1">
-                    <span>🛠️ Technical Info (For Support)</span>
-                    <span id="logsToggleArrow">▼</span>
+            <div class="border-t-2 border-slate-200 pt-1.5 flex-none">
+                <button type="button" id="toggleLogsBtn" class="text-xs sm:text-sm font-black text-slate-700 hover:text-slate-950 flex items-center justify-between w-full px-1 py-1">
+                    <span>🛠️ Technical Info & Support Logs</span>
+                    <span id="logsToggleArrow" class="text-sm font-black">▼</span>
                 </button>
-                <div id="loggingMonitorBox" class="state-hidden mt-1 border border-slate-300 bg-slate-950 rounded-lg p-2 space-y-1">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-1">
-                        <span class="text-[9px] font-bold uppercase text-green-400 font-mono">Live Debug Logs</span>
-                        <button type="button" id="clearLogsBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold">Clear</button>
+                <div id="loggingMonitorBox" class="state-hidden mt-1.5 border-2 sm:border-3 border-slate-800 bg-slate-950 rounded-xl p-2 sm:p-3 space-y-1.5">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                        <span class="text-xs sm:text-sm font-black uppercase text-green-400 font-mono">Live Debug Logs</span>
+                        <div class="flex items-center space-x-2">
+                            <!-- Copy Logs Button -->
+                            <button type="button" id="copyLogsBtn" class="bg-blue-700 hover:bg-blue-600 text-white px-2.5 py-1 rounded-lg text-xs sm:text-sm font-mono font-bold transition shadow cursor-pointer">
+                                📋 Copy Logs
+                            </button>
+                            <!-- Clear Logs Button -->
+                            <button type="button" id="clearLogsBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg text-xs sm:text-sm font-mono font-bold transition cursor-pointer">
+                                Clear
+                            </button>
+                        </div>
                     </div>
-                    <div id="liveLogsTerminal" class="w-full bg-black text-green-400 font-mono text-[9px] rounded p-1.5 h-14 overflow-y-auto select-all space-y-1 font-medium leading-tight">
+                    <div id="liveLogsTerminal" class="w-full bg-black text-green-400 font-mono text-xs sm:text-sm rounded-lg p-2 h-16 sm:h-24 overflow-y-auto select-all space-y-1 font-semibold leading-snug">
                         [00:00:00] SYSTEM READY: Waiting for user action...
                     </div>
                 </div>
@@ -180,12 +184,10 @@
         </div>
     </main>
 
-    <!-- Page Footer -->
-    <footer class="w-full text-center py-1 flex-none text-[10px] font-bold text-slate-500">
-        &copy; 2026 AccessShift AI — Designed for Everyone
+    <footer class="w-full text-center py-1 flex-none text-xs sm:text-sm font-bold text-slate-400">
+        &copy; 2026 AccessShift AI — Designed for Senior & Universal Accessibility
     </footer>
 
-    <!-- JavaScript Application Logic -->
     <script>
         const dropZone = document.getElementById('dropZone');
         const browseBtn = document.getElementById('browseBtn');
@@ -194,6 +196,7 @@
         const fileLabel = document.getElementById('fileLabel');
         const submitBtn = document.getElementById('submitBtn');
         const copyErrorBtn = document.getElementById('copyErrorBtn');
+        const copyLogsBtn = document.getElementById('copyLogsBtn');
         const clearLogsBtn = document.getElementById('clearLogsBtn');
         const liveLogsTerminal = document.getElementById('liveLogsTerminal');
         const toastNotice = document.getElementById('toastNotice');
@@ -207,7 +210,7 @@
         function showNotice(msg) {
             toastNotice.textContent = msg;
             toastNotice.classList.remove('state-hidden');
-            setTimeout(() => toastNotice.classList.add('state-hidden'), 5000);
+            setTimeout(() => toastNotice.classList.add('state-hidden'), 6000);
         }
 
         /* Restore saved endpoint from LocalStorage */
@@ -233,6 +236,7 @@
             console.log("[" + timestamp + "] [" + type + "] " + message);
         }
 
+        /* Toggle Debug Support Drawer */
         toggleLogsBtn.addEventListener('click', () => {
             const isHidden = loggingMonitorBox.classList.contains('state-hidden');
             if (isHidden) {
@@ -244,9 +248,33 @@
             }
         });
 
+        /* Clear Logs Handler */
         clearLogsBtn.addEventListener('click', () => {
             liveLogsTerminal.innerHTML = '';
             log('Logs cleared.');
+        });
+
+        copyLogsBtn.addEventListener('click', () => {
+            const logContent = Array.from(liveLogsTerminal.children)
+                .map(child => child.innerText)
+                .join('\n');
+
+            const tempArea = document.createElement('textarea');
+            tempArea.value = logContent || liveLogsTerminal.innerText;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            
+            try {
+                document.execCommand('copy');
+                log('Log history copied to clipboard.', 'SUCCESS');
+                copyLogsBtn.textContent = 'Copied!';
+            } catch (err) {
+                log('Failed to copy logs to clipboard.', 'ERROR');
+                copyLogsBtn.textContent = 'Copy Failed';
+            }
+            
+            document.body.removeChild(tempArea);
+            setTimeout(() => copyLogsBtn.textContent = '📋 Copy Logs', 2500);
         });
 
         browseBtn.addEventListener('click', (e) => { 
@@ -256,42 +284,46 @@
         });
         
         fileInput.addEventListener('change', (e) => { 
-            log('File input changed.');
+            log('File input selection updated.');
             if (e.target.files.length) updateSelectedFile(e.target.files[0]); 
         });
         
         dropZone.addEventListener('click', () => { 
-            log('Dropzone clicked.');
+            log('Dropzone area clicked.');
             fileInput.click(); 
         });
         
         dropZone.addEventListener('dragover', (e) => { 
             e.preventDefault(); 
-            dropZone.classList.add('border-blue-600', 'bg-blue-100'); 
+            dropZone.classList.add('border-blue-700', 'bg-blue-100'); 
         });
         
         dropZone.addEventListener('dragleave', () => { 
-            dropZone.classList.remove('border-blue-600', 'bg-blue-100'); 
+            dropZone.classList.remove('border-blue-700', 'bg-blue-100'); 
         });
         
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropZone.classList.remove('border-blue-600', 'bg-blue-100');
-            log('File dropped onto container.');
+            dropZone.classList.remove('border-blue-700', 'bg-blue-100');
+            log('File dropped onto target area.');
             if (e.dataTransfer.files.length) updateSelectedFile(e.dataTransfer.files[0]);
         });
 
         copyErrorBtn.addEventListener('click', () => {
             const errVal = document.getElementById('errorText').value;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(errVal);
-            } else {
-                document.getElementById('errorText').select();
+            const tempArea = document.createElement('textarea');
+            tempArea.value = errVal;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            try {
                 document.execCommand('copy');
+                log('Error trace copied to clipboard.', 'SUCCESS');
+                copyErrorBtn.textContent = 'Copied!';
+            } catch (e) {
+                log('Copy operation failed.', 'ERROR');
             }
-            log('Error text copied to clipboard.');
-            copyErrorBtn.textContent = 'Copied!';
-            setTimeout(() => copyErrorBtn.textContent = 'Copy Details', 2000);
+            document.body.removeChild(tempArea);
+            setTimeout(() => copyErrorBtn.textContent = 'Copy Error Details', 2500);
         });
 
         function updateSelectedFile(file) {
@@ -304,12 +336,12 @@
             if (file.name.toLowerCase().endsWith('.pdf') || file.type === "application/pdf") {
                 selectedFile = file;
                 const sizeMB = (selectedFile.size / (1024 * 1024)).toFixed(1);
-                fileLabel.innerText = `📄 ${selectedFile.name} (${sizeMB} MB)`;
+                fileLabel.innerText = "📄 " + selectedFile.name + " (" + sizeMB + " MB)";
                 document.getElementById('errorState').classList.add('state-hidden');
-                log('PDF file validated and staged.', 'SUCCESS');
+                log('PDF file validated successfully.', 'SUCCESS');
             } else {
                 log('Invalid file type rejected.', 'ERROR');
-                showNotice("Please choose a valid PDF file ending in .pdf");
+                showNotice("Please select a PDF document file ending in .pdf");
             }
         }
 
@@ -326,7 +358,7 @@
             
             if (!baseEndpoint) {
                 log('Remediation aborted: Server URL missing.', 'ERROR');
-                showNotice("Please type or paste the Web Address in Step 1.");
+                showNotice("Please enter or paste the Web Address in Step 1.");
                 return;
             }
 
@@ -351,7 +383,7 @@
 
             try {
                 const targetUrl = baseEndpoint + "/remediate";
-                log('Posting FormData payload to: ' + targetUrl);
+                log('Posting document payload to: ' + targetUrl);
                 
                 const response = await fetch(targetUrl, {
                     method: "POST",
@@ -379,8 +411,8 @@
                     if (Array.isArray(data.recommendations)) {
                         data.recommendations.forEach(rec => {
                             const li = document.createElement('li');
-                            li.className = "flex items-start text-slate-900";
-                            li.innerHTML = '<span class="text-emerald-600 font-black mr-1.5 select-none">✓</span>' + rec;
+                            li.className = "flex items-start text-slate-950";
+                            li.innerHTML = '<span class="text-emerald-600 font-black mr-2 select-none">✓</span>' + rec;
                             recList.appendChild(li);
                         });
                     }
